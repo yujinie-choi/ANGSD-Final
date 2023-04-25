@@ -14,10 +14,10 @@
 mamba activate rseqc
 
 for SAMPLE in /athena/angsd/scratch/yuc4017/alignments/*.bam; do
-  
+
   ID=`echo $SAMPLE | egrep -o 'SRR[0-9]*'`
 
-	geneBody_coverage.py -i ${SAMPLE} -r /athena/angsd/scratch/yuc4017/hg38.nochr.bed -o /athena/angsd/scratch/yuc4017/rseqc/${ID}.rseqc_geneBody_coverage.out
-	read_distribution.py -i ${SAMPLE} -r /athena/angsd/scratch/yuc4017/hg38.nochr.bed > /athena/angsd/scratch/yuc4017/rseqc/${ID}.rseqc_read_distribution.out
+  geneBody_coverage.py -i ${SAMPLE} -r /athena/angsd/scratch/yuc4017/hg38.HouseKeepingGenes.nochr.bed -o /athena/angsd/scratch/yuc4017/rseqc/${ID}.rseqc_geneBody_coverage.out
+  read_distribution.py -i ${SAMPLE} -r /athena/angsd/scratch/yuc4017/hg38.HouseKeepingGenes.nochr.bed > /athena/angsd/scratch/yuc4017/rseqc/${ID}.rseqc_read_distribution.out
 
 done

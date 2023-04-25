@@ -11,4 +11,4 @@
 
 mamba activate angsd
 
-featureCounts -M --minOverlap 1 -a /athena/angsd/scratch/yuc4017/genome/Homo_sapiens.GRCh38.109.gtf -o featureCounts.txt /athena/angsd/scratch/yuc4017/alignments/*.bam
+featureCounts -s 2 --minOverlap 1 -a /athena/angsd/scratch/yuc4017/genome/Homo_sapiens.GRCh38.109.gtf -o featureCounts.txt /athena/angsd/scratch/yuc4017/alignments/*.bam
