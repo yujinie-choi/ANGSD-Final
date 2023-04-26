@@ -12,9 +12,9 @@ output:
 
 # 1 Introduction
 
-Hutchinson-Gilford progeria syndrome (HGPS) is a rare and fatal disease that is characterized for it's accelerated aging; it is well known that the cause of HGPS is abnormally formed lamin A (progerin), either from a point mutation in the *LMNA* gene (G608G) or through abnormal post-translational processing (ZMPSTE24 gene mutation)[1](https://pubmed.ncbi.nlm.nih.gov/16838330/), yet it was not till recently that the more research has been done in revealing the molecular mechanisms behind the disease phenotype. A study done in 2018[2](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6209416/) found that PRPS1 protein and transcript levels are significantly decreased in HGPS cell lines vs healthy parental control. This gene is known to be necessary for purine metabolism and nucleotide biosynthesis. However, this study was done on a limited number of samples (2 HGPS and 2 non-disease control) and the phenotypic age of samples are not known as they were derived from cell lines.
+Hutchinson-Gilford progeria syndrome (HGPS) is a rare and fatal disease that is characterized for it's accelerated aging; it is well known that the cause of HGPS is abnormally formed lamin A (progerin), either from a point mutation in the *LMNA* gene (G608G) or through abnormal post-translational processing (ZMPSTE24 gene mutation)[[1]](https://pubmed.ncbi.nlm.nih.gov/16838330/), yet it was not till recently that the more research has been done in revealing the molecular mechanisms behind the disease phenotype. A study done in 2018[[2]](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6209416/) found that PRPS1 protein and transcript levels are significantly decreased in HGPS cell lines vs healthy parental control. This gene is known to be necessary for purine metabolism and nucleotide biosynthesis. However, this study was done on a limited number of samples (2 HGPS and 2 non-disease control) and the phenotypic age of samples are not known as they were derived from cell lines.
 
-Another study in late 2018 generated a large dataset of RNA-seq data of fibroblast cell lines from patients of a wide-range of ages as well as 10 HGPS patients[3](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1599-6) for the purpose of creating a machine learning method that could predict age. The algorithm correctly could identify accelerated aging in humans showing that there are significant transcriptomes of skin fibroblasts that retain important age-related (and accelerated aging) signatures.
+Another study in late 2018 generated a large dataset of RNA-seq data of fibroblast cell lines from patients of a wide-range of ages as well as 10 HGPS patients[[3]](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1599-6) for the purpose of creating a machine learning method that could predict age. The algorithm correctly could identify accelerated aging in humans showing that there are significant transcriptomes of skin fibroblasts that retain important age-related (and accelerated aging) signatures.
 
 In this project, I wanted to use the extensive patient dataset to corroborate the findings that PRPS1 is indeed under-expressed in HGPS patients compared to both young and old patients while also exploring other potential differential expressed genes that cause the aging phenotype in HGPS patients. Particularly, I believe that HGPS must have significant DGEs from young samples. These genes might potentially be worth studying for accelerated-aging effect of HGPS. 
 
@@ -525,9 +525,9 @@ num.dge.summary
 
 **Volcano Plot**
 
-Looking at our top 10 genes of significant value for `young vs hgps` and `old vs hgps` and comparing against the top 10 genes that had significant values for `young vs hgps` while being filtered for non-significant value `old vs hgps` genes on a Volcano Plot. It looks like these filtered genes do not have very high log-fold change, unfortuneately. 
+Looking at our top 10 genes of significant value for `young vs hgps` and `old vs hgps` and comparing against the top 10 genes that had significant values for `young vs hgps` while being filtered for non-significant value `old vs hgps` genes on a Volcano Plot. It looks like these filtered genes do not have very high log-fold change, unfortunately. 
 
-```{r volcano-plot, warning=FALSE, message=FALSE, fig.width=15}
+```{r volcano-plot, warning=FALSE, message=FALSE, fig.height=8}
 
 #old vs hgps
 p3 <- EnhancedVolcano(DGE.results.old.shrnk, lab=rownames(DGE.results.old.shrnk), x="log2FoldChange", y="padj", pCutoff=0.05, title="Old vs HGPS", boxedLabels = TRUE, selectLab = annot.DGE.genes[annot.DGE.genes$CONDITIONS =="old vs hgps",]$ENSEMBL)
@@ -623,7 +623,7 @@ On the other hand, we see much better enrichment results for `DEMAGALHAES_AGING_
 
 Unfortunately for our filtered genes, none of the genes in either of these sets were found. The filtering was rather stringent after all and wee were not left with many genes, so we could not perform GSEA on these sets for `young vs hgps (filtered)`.
 
-```{r aging-geneset, warning=FALSE, message=FALSE, fig.height=10, fig.show=FALSE}
+```{r aging-geneset, warning=FALSE, message=FALSE, fig.height=10, fig.show='hide'}
 
 gmt.up_df <- read.gmt("Files/DEMAGALHAES_AGING_UP.v2023.1.Hs.gmt")
 gmt.down_df <- read.gmt("Files/DEMAGALHAES_AGING_DN.v2023.1.Hs.gmt")
@@ -659,7 +659,7 @@ gseaplot(gse.down.agingset.old, geneSetID = 1, title = "Enrichment of DEMAGALHAE
 
 ```
 
-![**Fig. 5. GSEA results for DEMAGALHAES_AGING_UP and DEMAGALHAES_AGING_DN:** The GSEA plots would not stack, so I'm embedding an image directly, but you can run the code block to see the same results!](./Images/star_alignment_plot.png)
+![**Fig. 5. GSEA results for DEMAGALHAES_AGING_UP and DEMAGALHAES_AGING_DN:** The GSEA plots would not stack, so I'm embedding an image directly, but you can run the code block to see the same results!](./Images/gsea_results.png)
 
 # 4 Discussion
 
@@ -667,7 +667,7 @@ As I was exploring the data, I realized that I was it was hard to tell whether s
 
 Because of this, I arbitrarily created a fourth condition where we observe the DEG genes of `young vs hgps` that was also filtered to only have genes that were non-significant in `old vs hgps` (stringent p.val > 0.95). In doing so, I was hoping to be able to see DEGs of `young vs hgps` that were highly correlated with aging. However, I don't think this method was very statistically sound... I think it would have been better to filter based off of a correlation analysis of the DESeq2 `old vs hgps` outputs. Also, in hindsight, maybe it would have been easier to group the `young` and `old` samples into one disease-free control condition, so that I would not have to be comparing two different effects but I was in too deep after this realization, and also there might be new light shed via exploration of the added layer of age.
 
-Other problems I ran into was the strangely high number of unassigned multi-mapping features in one of the HGPS samples `SRR7093948` which didn't reflect in QoRTs results. Compared to the other samples, `SRR7093948` did have a higher percentage of reads mapped to multiple loci (other samples ~5% where as this sample was at ~11%) but interestingly this is not reflected in QoRTs. However, because there is still comparable sequencing depth for assigned reads of that sample, I continued to use it in the analysis. 
+Other problems I ran into was the strangely high number of unassigned multi-mapping features in one of the HGPS samples `SRR7093948`. Compared to the other samples, `SRR7093948` did have a higher percentage of reads mapped to multiple loci (other samples ~5% where as this sample was at ~11%) but interestingly this is not reflected in QoRTs. However, because there is still comparable sequencing depth for assigned reads of that sample, I continued to use it in the analysis. 
 
 On the topic of sequencing depth, my HGPS condition samples had much higher sequencing depth than the non-disease conditions; however, this was accounted for in the normalization of the data. I also used `rlog()` instead of `vst()` as the former is better at dealing with samples with a largely varying size factors.  
 
